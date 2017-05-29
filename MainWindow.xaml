@@ -1,0 +1,13 @@
+﻿<Window x:Class="Eagle.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="768" Width="1024"
+        WindowStyle="None" Topmost="False" Opacity="1" AllowsTransparency="True">
+    <Window.Background>
+        <ImageBrush ImageSource="pack://siteoforigin:,,,/Image/Eagle.jpg"/>
+    </Window.Background>
+    <Grid>
+        <Label Name="TimeLabel" Content="Label" Margin="28.5,0,0,60" Foreground="White" FontSize="36" Background="#4CFFFFFF" Height="60" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="333"/>
+        <Label Name="DateLabel" Content="Label" Margin="28.5,0,0,30" Foreground="White" FontSize="18" Background="#4CFFFFFF" HorizontalAlignment="Left" Width="333" Height="30" VerticalAlignment="Bottom"/>
+    </Grid>
+</Window>

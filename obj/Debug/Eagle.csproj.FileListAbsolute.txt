@@ -1,0 +1,15 @@
+M:\Eagle\Eagle\bin\Debug\Eagle.exe
+M:\Eagle\Eagle\bin\Debug\Eagle.pdb
+M:\Eagle\Eagle\obj\Debug\MainWindow.baml
+M:\Eagle\Eagle\obj\Debug\MainWindow.g.cs
+M:\Eagle\Eagle\obj\Debug\App.g.cs
+M:\Eagle\Eagle\obj\Debug\Eagle_MarkupCompile.cache
+M:\Eagle\Eagle\obj\Debug\Eagle.g.resources
+M:\Eagle\Eagle\obj\Debug\Eagle.Properties.Resources.resources
+M:\Eagle\Eagle\obj\Debug\Eagle.csproj.GenerateResource.Cache
+M:\Eagle\Eagle\obj\Debug\Eagle.exe
+M:\Eagle\Eagle\obj\Debug\Eagle.pdb
+M:\Eagle\Eagle\obj\Debug\NotePadWindow.baml
+M:\Eagle\Eagle\obj\Debug\NotePadWindow.g.cs
+M:\Eagle\Eagle\obj\Debug\Eagle.csprojResolveAssemblyReference.cache
+M:\Eagle\Eagle\bin\Debug\Eagle.exe.config
