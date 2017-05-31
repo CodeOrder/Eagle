@@ -10,11 +10,18 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Diagnostics;
 using Eagle.Core;
 using Eagle.Core.Notepad;
 
 namespace Eagle
 {
+    internal class RunningNoteManager
+    {
+        internal static Dictionary<string, TextNote> runningTextnote = new Dictionary<string, TextNote>();
+        internal static Dictionary<string, PictureNote> runningPicturenote = new Dictionary<string, PictureNote>();
+    }
+
     /// <summary>
     /// NotePadWindow.xaml 的交互逻辑
     /// </summary>
@@ -29,7 +36,29 @@ namespace Eagle
             this.Left = this.Top = 0;
             this.KeyDown += NotePadWindow_KeyDown;
             this.MouseRightButtonDown += NotePadWindow_MouseRightButtonDown;
+            this.Loaded += NotePadWindow_Loaded;
+            this.Closing += NotePadWindow_Closing;
             this.TextButton.IsEnabled = false;
+        }
+
+        void NotePadWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            Dictionary<string, TextNote> LoadedTextNotes = NotepadIO.LoadAllTextNote();
+            foreach (TextNote note in LoadedTextNotes.Values)
+            {
+                note.SetParentGrid(this.PanelGrid);
+                Debug.WriteLine("Left = " + note.Margin.Left + " Top = " + note.Margin.Top);
+                this.PanelGrid.Children.Add(note);
+                RunningNoteManager.runningTextnote.Add(note.name, note);
+            }
+        }
+
+        void NotePadWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            this.Topmost = false;
+            foreach (TextNote note in RunningNoteManager.runningTextnote.Values)
+                NotepadIO.SaveTextNote(note);
+            NotepadIO.DeleteTextRubbish();
         }
 
         void NotePadWindow_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
@@ -38,8 +67,11 @@ namespace Eagle
             if (this.mode == 0)
             {
                 TextNote note = new TextNote(this.PanelGrid);
+                RunningNoteManager.runningTextnote.Add(note.name, note);
                 note.Margin = new Thickness(mousePOS.X,mousePOS.Y,0,0);
                 this.PanelGrid.Children.Add(note);
+                if (note.is_ParentGridset == false)
+                    note.SetParentGrid(this.PanelGrid);
             }
             if(this.mode == 1)
             {

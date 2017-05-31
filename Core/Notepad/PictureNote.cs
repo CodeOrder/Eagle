@@ -35,6 +35,9 @@ namespace Eagle.Core.Notepad
 
             imagebox.Background = new ImageBrush { ImageSource = picture };
             contentbox.Background = new SolidColorBrush { Color = Color.FromArgb(8, 255, 255, 255) };
+            contentbox.HorizontalContentAlignment = HorizontalAlignment.Center;
+            contentbox.VerticalContentAlignment = VerticalAlignment.Center;
+            contentbox.BorderBrush = null;
             contentbox.Text = "文字...";
 
             imagebox.Click += imagebox_Click;
@@ -138,7 +141,7 @@ namespace Eagle.Core.Notepad
             this.Width = 300;
             this.Height = this.Width * WHratio;
             this.imagebox.Margin = new Thickness(30, 10, 10, Height * 0.15);
-            this.contentbox.Margin = new Thickness(90, Height - Height * 0.15, 10, 10);
+            this.contentbox.Margin = new Thickness(90, Height - Height * 0.15, 10, 2);
             this.deletebutton.Margin = new Thickness(60, Height - Height * 0.15, 10 +
                 (this.Width - contentbox.Margin.Left - contentbox.Margin.Right), 2);
             this.savebutton.Margin = new Thickness(30, Height - Height * 0.15, 10 + (this.Width - contentbox.Margin.Left - contentbox.Margin.Right) +

@@ -15,25 +15,49 @@ namespace Eagle.Core.Notepad
     ///和两格Button子对象，子对象的更新触发CorkIdea的更新
     {
         public string name = null;
+        public string last_change_time = null;
+        internal bool is_ParentGridset = false;
 
         public TextBox titlebox = new TextBox();
         public TextBox contentbox = new TextBox();
-        public Button savebutton = new Button();
         public Button deletebutton = new Button();
 
         private Grid ParentGrid;
         public TextNote(Grid ParentWindow)
         {
+            this.last_change_time = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss:ff");
+            this.is_ParentGridset = true;
             this.ParentGrid = ParentWindow;
             setparent();
             this.Children.Add(titlebox);                //加入子对象
             this.Children.Add(contentbox);
-            this.Children.Add(savebutton);
             this.Children.Add(deletebutton);
             setchildren();
+
             Random nameram = new Random();              //使得笔记的名称基本是随机的
             int ramvalue = nameram.Next(0, Int32.MaxValue);
             this.name = DateTime.Now.ToString("yyyyMMddhhmmss") + ramvalue + "_Note";
+        }
+
+        public TextNote(string name, string title, string text,double[] margin)
+        {
+            this.last_change_time = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss:ff");
+            setparent();
+            this.Margin = new Thickness(margin[0], margin[1], 0, 0);
+            this.Children.Add(titlebox);                //加入子对象
+            this.Children.Add(contentbox);
+            this.Children.Add(deletebutton);
+            setchildren();
+
+            this.titlebox.Text = title;
+            this.contentbox.Text = text;
+            this.name = name;
+        }
+
+        public void SetParentGrid(Grid _parentGrid)
+        {
+            this.ParentGrid = _parentGrid;
+            this.is_ParentGridset = true;
         }
 
         private void setparent()
@@ -53,7 +77,7 @@ namespace Eagle.Core.Notepad
 
         private void setchildren()
         {
-            titlebox.Margin = new Thickness((double)this.Width * 0.5, (double)this.Height * 0.05, (double)this.Width * 0.1, (double)this.Height * 0.85);
+            titlebox.Margin = new Thickness((double)this.Width * 0.3, (double)this.Height * 0.05, (double)this.Width * 0.1, (double)this.Height * 0.85);
             contentbox.Margin = new Thickness((double)this.Width * 0.1, (double)this.Height * 0.15, (double)this.Width * 0.1, (double)this.Height * 0.05);
             titlebox.TextChanged += titlebox_TextChanged;
             contentbox.TextChanged += contentbox_TextChanged;
@@ -66,26 +90,17 @@ namespace Eagle.Core.Notepad
             contentbox.AcceptsReturn = true;
             contentbox.TextWrapping = TextWrapping.Wrap;
 
-            savebutton.Margin = new Thickness((double)this.Width * 0.1, (double)this.Height * 0.05, (double)this.Width * 0.7, (double)this.Height * 0.85);
-            deletebutton.Margin = new Thickness((double)this.Width * 0.3, (double)this.Height * 0.05, (double)this.Width * 0.5, (double)this.Height * 0.85);
-            BitmapImage saveimage = new BitmapImage(new Uri(Environment.CurrentDirectory + "/Icon/DownArrow.png", UriKind.Relative));
-            savebutton.Background = new ImageBrush { ImageSource = saveimage };
-            savebutton.BorderBrush = null;
             BitmapImage binimage = new BitmapImage(new Uri(Environment.CurrentDirectory + "/Icon/Bin.png", UriKind.Relative));
+            deletebutton.Margin = new Thickness((double)this.Width * 0.1, (double)this.Height * 0.05, (double)this.Width * 0.7, (double)this.Height * 0.85);
             deletebutton.Background = new ImageBrush { ImageSource = binimage };
             deletebutton.BorderBrush = null;
-            savebutton.Click += savebutton_Click;
             deletebutton.Click += deletebutton_Click;
         }
 
         void deletebutton_Click(object sender, RoutedEventArgs e)
         {
             ParentGrid.Children.Remove(this);
-        }
-
-        void savebutton_Click(object sender, RoutedEventArgs e)
-        {
-
+            RunningNoteManager.runningTextnote.Remove(this.name);
         }
 
         bool ismove = false;
@@ -123,10 +138,12 @@ namespace Eagle.Core.Notepad
 
         void titlebox_TextChanged(object sender, TextChangedEventArgs e)
         {
+            this.last_change_time = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss:ff");
         }
 
         void contentbox_TextChanged(object sender, TextChangedEventArgs e)
         {
+            this.last_change_time = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss:ff");
         }
     }
 }
