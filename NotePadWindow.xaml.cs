@@ -47,9 +47,17 @@ namespace Eagle
             foreach (TextNote note in LoadedTextNotes.Values)
             {
                 note.SetParentGrid(this.PanelGrid);
-                Debug.WriteLine("Left = " + note.Margin.Left + " Top = " + note.Margin.Top);
                 this.PanelGrid.Children.Add(note);
                 RunningNoteManager.runningTextnote.Add(note.name, note);
+            }
+
+            Dictionary<string, PictureNote> LoadedPictureNotes = NotepadIO.LoadAllPictureNote();
+            foreach (PictureNote note in LoadedPictureNotes.Values)
+            {
+                note.SetParentGrid(this.PanelGrid);
+                this.PanelGrid.Children.Add(note);
+                RunningNoteManager.runningPicturenote.Add(note.name, note);
+                Debug.WriteLine("图像笔记："+note.name + "已保存至RunningNoteManager");
             }
         }
 
@@ -58,7 +66,9 @@ namespace Eagle
             this.Topmost = false;
             foreach (TextNote note in RunningNoteManager.runningTextnote.Values)
                 NotepadIO.SaveTextNote(note);
-            NotepadIO.DeleteTextRubbish();
+            foreach (PictureNote note in RunningNoteManager.runningPicturenote.Values)
+                NotepadIO.SavePictureNote(note);
+            NotepadIO.DeleteRubbish();
         }
 
         void NotePadWindow_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
@@ -70,12 +80,11 @@ namespace Eagle
                 RunningNoteManager.runningTextnote.Add(note.name, note);
                 note.Margin = new Thickness(mousePOS.X,mousePOS.Y,0,0);
                 this.PanelGrid.Children.Add(note);
-                if (note.is_ParentGridset == false)
-                    note.SetParentGrid(this.PanelGrid);
             }
             if(this.mode == 1)
             {
                 PictureNote note = new PictureNote(this.PanelGrid);
+                RunningNoteManager.runningPicturenote.Add(note.name, note);
                 note.Margin = new Thickness(mousePOS.X, mousePOS.Y, 0, 0);
                 this.PanelGrid.Children.Add(note);
             }
