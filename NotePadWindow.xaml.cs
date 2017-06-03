@@ -112,6 +112,14 @@ namespace Eagle
             this.mode = 1;
         }
 
+        private void QuitButton_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (Window window in WindowManager.RunningWindows.Values)
+                window.Close();
+            foreach (Window window in WindowManager.MainWindows)
+                window.Close();
+        }
+
 
     }
 }

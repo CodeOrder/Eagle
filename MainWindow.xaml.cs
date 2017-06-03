@@ -13,6 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Timers;
 using Eagle.Core;
+using Eagle.Core.EagleApplication;
 
 namespace Eagle
 {
@@ -43,14 +44,24 @@ namespace Eagle
             this.Width = System.Windows.SystemParameters.PrimaryScreenWidth;
             this.Left = this.Top = 0;
             this.KeyDown += MainWindow_KeyDown;
+            this.Closing += MainWindow_Closing;
             clock.Enabled = true;
             clock.Interval = 900;
             clock.Elapsed += new System.Timers.ElapsedEventHandler(Update);
 
-            SmoothWindowEffect effect = new SmoothWindowEffect(Color.FromRgb(255, 255, 255), 20);
-            effect.AtMid += tmp;
-            effect.AtEnd += tmp;
-            effect.Start();
+            ApplicationManager.LoadApplications();
+            ApplicationManager.LoadIconInfo();
+            foreach (ApplicationIcon icon in ApplicationManager.ApplicationIconList)
+            {
+                icon.SetParent(this.MainGrid);
+                this.MainGrid.Children.Add(icon);
+            }
+        }
+
+        void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            foreach (ApplicationIcon icon in ApplicationManager.ApplicationIconList)
+                ApplicationManager.SaveIconInfo(icon);
         }
 
         void MainWindow_KeyDown(object sender, KeyEventArgs e)
@@ -70,9 +81,19 @@ namespace Eagle
                 }));
         }
 
-        void tmp()
+        private void AddAppButton_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("Finish!");
+            Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
+            dialog.Filter = "eag文件 (*.eag)|*.eag";
+            dialog.InitialDirectory = Environment.CurrentDirectory;
+            if (dialog.ShowDialog() == true)
+            {
+                Eagle.Core.EagleApplication.Application app = ApplicationManager.InstallApplication(dialog.FileName);
+                ApplicationIcon icon = ApplicationManager.FitApplicationIcon(app);
+                icon.SetParent(this.MainGrid);
+                this.MainGrid.Children.Add(icon);
+                ApplicationManager.ApplicationIconList.Add(icon);
+            }
         }
     }
 }

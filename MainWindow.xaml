@@ -6,8 +6,16 @@
     <Window.Background>
         <ImageBrush ImageSource="pack://siteoforigin:,,,/Image/Eagle.jpg"/>
     </Window.Background>
-    <Grid>
+    <Grid Name="MainGrid">
         <Label Name="TimeLabel" Content="Label" Margin="28.5,0,0,60" Foreground="White" FontSize="36" Background="#4CFFFFFF" Height="60" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="333"/>
         <Label Name="DateLabel" Content="Label" Margin="28.5,0,0,30" Foreground="White" FontSize="18" Background="#4CFFFFFF" HorizontalAlignment="Left" Width="333" Height="30" VerticalAlignment="Bottom"/>
+        <Button Name="AddAppButton" Height="40" Margin="0,10,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="40" BorderBrush="{x:Null}" Click="AddAppButton_Click">
+            <Button.OpacityMask>
+                <ImageBrush ImageSource="pack://siteoforigin:,,,/Icon/Add.png"/>
+            </Button.OpacityMask>
+            <Button.Background>
+                <ImageBrush ImageSource="pack://siteoforigin:,,,/Icon/Add.png"/>
+            </Button.Background>
+        </Button>
     </Grid>
 </Window>

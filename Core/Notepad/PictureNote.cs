@@ -87,8 +87,8 @@ namespace Eagle.Core.Notepad
             {
                 Point mousepos = e.GetPosition(null);
                 Thickness margin = this.Margin;
-                margin.Left = beforepos.X + (mousepos.X - beforepos.X);
-                margin.Top = beforepos.Y + (mousepos.Y - beforepos.Y);
+                margin.Left = mousepos.X ;
+                margin.Top = mousepos.Y;
                 this.Margin = margin;
             }
         }
@@ -109,7 +109,6 @@ namespace Eagle.Core.Notepad
         {
             Point mousepos = e.GetPosition(null);
             beforepos = mousepos;
-            //beforepos = new Point(this.Margin.Left, this.Margin.Top);
             PictureNote note = (PictureNote)e.OriginalSource;
             ismove = true;
             note.CaptureMouse();
