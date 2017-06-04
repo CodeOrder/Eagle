@@ -9,13 +9,5 @@
         </Grid.Background>
         <Button Content="文字" Name="TextButton" HorizontalAlignment="Left" Margin="10,0,0,10" Width="94" Height="33" VerticalAlignment="Bottom" Click="TextButton_Click" />
         <Button Content="图片" Name="PictureButton" Margin="0,0,10,10" HorizontalAlignment="Right" Width="94" Height="33" VerticalAlignment="Bottom" Click="PictureButton_Click"/>
-        <Button Name="QuitButton" Height="40" Margin="0,10,10,0" VerticalAlignment="Top" BorderBrush="{x:Null}" HorizontalAlignment="Right" Width="40" Click="QuitButton_Click">
-            <Button.OpacityMask>
-                <ImageBrush ImageSource="pack://siteoforigin:,,,/Icon/Cross.png"/>
-            </Button.OpacityMask>
-            <Button.Background>
-                <ImageBrush ImageSource="pack://siteoforigin:,,,/Icon/Cross.png"/>
-            </Button.Background>
-        </Button>
     </Grid>
 </Window>

@@ -27,6 +27,7 @@ namespace Eagle.Core.Notepad
         public PictureNote(Grid _parentGrid)
         {
             is_parentSet = true;
+            this.parentGrid = _parentGrid;
             SetChildren();
             UpdateChildrenLocation();
 
@@ -114,11 +115,6 @@ namespace Eagle.Core.Notepad
             note.CaptureMouse();
         }
 
-        void contentbox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
-
         void imagebox_Click(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
@@ -162,12 +158,15 @@ namespace Eagle.Core.Notepad
             contentbox.VerticalContentAlignment = VerticalAlignment.Center;
             contentbox.BorderBrush = null;
             contentbox.Text = "文字...";
-
+            contentbox.KeyDown += contentbox_KeyDown;
             imagebox.Click += imagebox_Click;
-            contentbox.TextChanged += contentbox_TextChanged;
-
             this.deletebutton.Click += deletebutton_Click;
+        }
 
+        void contentbox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.Enter)
+                this.contentbox.ReleaseAllTouchCaptures();
         }
     }
 }

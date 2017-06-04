@@ -36,9 +36,15 @@ namespace Eagle
             this.Left = this.Top = 0;
             this.KeyDown += NotePadWindow_KeyDown;
             this.MouseRightButtonDown += NotePadWindow_MouseRightButtonDown;
+            this.MouseLeftButtonDown += NotePadWindow_MouseLeftButtonDown;
             this.Loaded += NotePadWindow_Loaded;
             this.Closing += NotePadWindow_Closing;
             this.TextButton.IsEnabled = false;
+        }
+
+        void NotePadWindow_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            this.Focus();
         }
 
         void NotePadWindow_Loaded(object sender, RoutedEventArgs e)
