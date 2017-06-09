@@ -25,7 +25,9 @@ namespace Eagle
         Timer clock = new Timer();
         public MainWindow()
         {
-            WindowManager.RunningWindows.Add("main",this);
+            InitializeComponent();
+            WindowManager.CurrentWindow = this;
+            WindowManager.RunningWindows.Add("main", this);
             WindowManager.MainWindows.Add(this);
             WindowManager.MainWindows.Add(new NotePadWindow());
             WindowManager.CurrentID = 0;
@@ -38,16 +40,16 @@ namespace Eagle
                 }
             }
 
-            this.Topmost = true;
-            InitializeComponent();
             this.Height = System.Windows.SystemParameters.PrimaryScreenHeight;
             this.Width = System.Windows.SystemParameters.PrimaryScreenWidth;
             this.Left = this.Top = 0;
             this.KeyDown += MainWindow_KeyDown;
+            this.MouseRightButtonDown += MainWindow_MouseRightButtonDown;
             this.Closing += MainWindow_Closing;
             clock.Enabled = true;
             clock.Interval = 900;
             clock.Elapsed += new System.Timers.ElapsedEventHandler(Update);
+            
 
             ApplicationManager.LoadApplications();
             ApplicationManager.LoadIconInfo();
@@ -55,6 +57,26 @@ namespace Eagle
             {
                 icon.SetParent(this.MainGrid);
                 this.MainGrid.Children.Add(icon);
+            }
+
+            WindowManager.WindowChanged += WindowManager_WindowChanged;
+        }
+
+
+        void MainWindow_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            this.Topmost = false;
+        }
+
+        void WindowManager_WindowChanged(object sender, Window before_win, Window after_win)
+        {
+            this.Topmost = false;
+            System.Diagnostics.Debug.WriteLine("before_win = " + before_win.Name + "   after_win = " + after_win.Name);
+            if (after_win == this)                           //检查切换后的窗口是否是主窗口
+            {
+                System.Diagnostics.Debug.WriteLine("Get!");
+                foreach (Core.EagleApplication.Application app in ApplicationManager.RunningApplicationList)
+                    app.SendCommand(ApplicationCMDKind.Topmost);        //置顶所有正在运行的Eagle程序
             }
         }
 
@@ -70,15 +92,17 @@ namespace Eagle
                 WindowManager.NextMainWindow();
             else if (e.Key == Key.Left)
                 WindowManager.LastMainWindow();
+            foreach (Core.EagleApplication.Application app in ApplicationManager.RunningApplicationList)
+                app.SendCommand(ApplicationCMDKind.Untopmost);
         }
 
         private void Update(object sender, EventArgs e)
         {
             this.Dispatcher.Invoke(new Action(delegate
-                {
-                    this.TimeLabel.Content = DateTime.Now.ToString("hh:mm:ss");
-                    this.DateLabel.Content = DateTime.Now.ToString("yyyy年MM月dd日");
-                }));
+            {
+                this.TimeLabel.Content = DateTime.Now.ToString("hh:mm:ss");
+                this.DateLabel.Content = DateTime.Now.ToString("yyyy年MM月dd日");
+            }));
         }
 
         private void AddAppButton_Click(object sender, RoutedEventArgs e)
@@ -93,6 +117,8 @@ namespace Eagle
                 icon.SetParent(this.MainGrid);
                 this.MainGrid.Children.Add(icon);
                 ApplicationManager.ApplicationIconList.Add(icon);
+                System.Diagnostics.Debug.WriteLine("Send CMD!");
+                app.SendCommand(ApplicationCMDKind.Topmost);
             }
         }
     }
