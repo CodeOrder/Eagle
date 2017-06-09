@@ -11,7 +11,10 @@ namespace Eagle.Core
     {
         internal static Dictionary<string, Window> RunningWindows = new Dictionary<string, Window>();
         internal static List<Window> MainWindows = new List<Window>();
+        internal static Window CurrentWindow = new Window();
         internal static int CurrentID = 0;
+        internal delegate void WindowChangedHandler(object sender, Window before_win, Window after_win);
+        internal static event WindowChangedHandler WindowChanged;
         static SmoothWindowEffect effect;
         static string mode;
 
@@ -64,14 +67,15 @@ namespace Eagle.Core
             after = MainWindows[CurrentID];
             before.Topmost = false;
             after.Topmost = false;
-            after.Focus();
-
+            WindowChanged(null, before, after);
+            after.Focus();                  //使得切换后的窗口在渐变层与切换前窗口之间
         }
 
         private static void SetWindowChanged()
         {
             Window after = MainWindows[CurrentID];
-            after.Topmost = true;
+            if(after != WindowManager.RunningWindows["main"])
+                after.Topmost = true;
         }
     }
 }

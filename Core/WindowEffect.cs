@@ -58,7 +58,6 @@ namespace Eagle.Core
                         ctime += 1;
                     else if (ctime >= times)
                     {
-                        Debug.WriteLine("AtMid!");
                         AtMid();
                         mode = 2;
                     }

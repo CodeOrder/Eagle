@@ -10,8 +10,8 @@ namespace Eagle.Core.EagleApplication
 {
     class ApplicationManager
     {
-        //internal static Dictionary<string, Application> RunningApplicationDictionary = new Dictionary<string,Application>();
-        //internal static List<Application> RunningApplicationList = new List<Application>();
+        internal static Dictionary<string, Application> RunningApplicationDictionary = new Dictionary<string, Application>();
+        internal static List<Application> RunningApplicationList = new List<Application>();
         internal static Dictionary<string, Application> ApplicationDictionary = new Dictionary<string,Application>();
         internal static List<Application> ApplicationList = new List<Application>();
         internal static Dictionary<Application, ApplicationIcon> ApplicationIconDictionary = new Dictionary<Application, ApplicationIcon>();
@@ -39,9 +39,10 @@ namespace Eagle.Core.EagleApplication
             foreach (FileInfo file in files)
             {
                 lines = File.ReadAllLines(file.FullName, Encoding.UTF8);
-                app = new Application(lines[0], lines[1], lines[2], lines[3],123);
+                app = new Application(lines[0], lines[1], lines[2], lines[3], lines[4], 123);
                 ApplicationList.Add(app);
                 ApplicationDictionary.Add(lines[0], app);
+                app.SendCommand(ApplicationCMDKind.Topmost);
             }
 
             foreach(Application a in ApplicationList)
@@ -49,7 +50,7 @@ namespace Eagle.Core.EagleApplication
         }
         /// <summary>
         /// 安装并注册一个标准的Eagle Application，返回这个Application
-        /// name.eag：程序名，可执行文件名（无后缀），图标文件名（加后缀）
+        /// name.eag：程序名，可执行文件名（无后缀），图标文件名（加后缀），管道文件夹路径
         /// </summary>
         /// <param name="INSFilepath">是一个后缀为.eag的文件夹</param>
         /// <returns></returns>
@@ -60,7 +61,6 @@ namespace Eagle.Core.EagleApplication
             DirectoryInfo INSdir = new DirectoryInfo(INSFile.DirectoryName);
             CopyDirectory(INSdir.FullName, Environment.CurrentDirectory + @"\Application\" + INSFile.Name);
 
-
             string[] infolines = File.ReadAllLines(INSFile.FullName);                                 //注册程序信息
             FileStream filestream = new FileStream(Environment.CurrentDirectory + "\\Data\\Application\\" + INSFile.Name + ".dat", FileMode.Create);
             StreamWriter writer = new StreamWriter(filestream);
@@ -68,13 +68,15 @@ namespace Eagle.Core.EagleApplication
             writer.WriteLine(Environment.CurrentDirectory + @"\Application\" + INSFile.Name);
             writer.WriteLine(Environment.CurrentDirectory + @"\Application\" + INSFile.Name + @"\" + infolines[1] + ".exe");
             writer.WriteLine(Environment.CurrentDirectory + @"\Application\" + INSFile.Name + @"\" + infolines[2]);
+            writer.WriteLine(Environment.CurrentDirectory + @"\Application\" + INSFile.Name + @"\" + infolines[3]);
             writer.Close();
             writer.Dispose();
 
             EagleApplication.Application app = new EagleApplication.Application(infolines[0],
                 Environment.CurrentDirectory + @"\Application\" + INSFile.Name,
                 Environment.CurrentDirectory + @"\Application\" + INSFile.Name + @"\" + infolines[1] + ".exe",
-                Environment.CurrentDirectory + @"\Application\" + INSFile.Name + @"\" + infolines[2], 
+                Environment.CurrentDirectory + @"\Application\" + INSFile.Name + @"\" + infolines[2],
+                Environment.CurrentDirectory + @"\Application\" + INSFile.Name + @"\" + infolines[3],
                 123);
             ApplicationManager.ApplicationList.Add(app);
             ApplicationManager.ApplicationDictionary.Add(infolines[0], app);
@@ -150,9 +152,19 @@ namespace Eagle.Core.EagleApplication
             return new ApplicationIcon(app, new double[] { 0, 0, 0, 0 });
         }
 
-        internal static void RegistIcon(ApplicationIcon icon)
+        internal static void SendCommand(Application app, ApplicationCMDKind cmd)
         {
-            
+            StreamWriter writer;
+            switch (cmd)
+            {
+                case ApplicationCMDKind.Stop:
+                    
+                    break;
+                case ApplicationCMDKind.Topmost:
+                    break;
+                case ApplicationCMDKind.Untopmost:
+                    break;
+            }
         }
     }
 }
