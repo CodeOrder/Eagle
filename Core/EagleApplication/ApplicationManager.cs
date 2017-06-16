@@ -52,7 +52,7 @@ namespace Eagle.Core.EagleApplication
         /// 安装并注册一个标准的Eagle Application，返回这个Application
         /// name.eag：程序名，可执行文件名（无后缀），图标文件名（加后缀），管道文件夹路径
         /// </summary>
-        /// <param name="INSFilepath">是一个后缀为.eag的文件夹</param>
+        /// <param name="INSFilepath">是一个后缀为.eag的安装信息文件路径</param>
         /// <returns></returns>
         internal static EagleApplication.Application InstallApplication(string INSFilepath)
         {
